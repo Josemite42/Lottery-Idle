@@ -7,9 +7,27 @@
 			
 	<body onload="loadFunc()">
 		<div id="statusBox">
-			Money:  $<span id ="cash">0</span> &emsp;&emsp; Tickspeed: <span id = "tick">2000</span>ms
+			<table ><tr style="height: 1em;">
+				<td style="width: 15em;">Money:  $<span id ="cash">0</span></td>
+				<td style="width: 15em;">Tickspeed: <span id = "tick">2000</span>ms</td>
+				<td style="width: 15em;">
+					<table><tr>
+						<td style="width: 5em; height: 1em;">
+								<div id="xpProgressHolder">
+									<div id="xpBackground" class="progressBackground">
+										<div id="xpForeground" class="progressForeground"></div>
+									</div>
+								</div>
+							</td>
+						<td style="width: 10em;">XP:  <span id ="xpSpan">0 / 0</span></td>
+					</tr></table>
+				</td>
+				<td style="width: 15em;">Level: <span id="levelSpan">0</span></td>
+			</tr></table>
+
 		</div>
-		<div id="ballBox">
+
+		<div id="ballBox"  class="standardBox">
 			Lottery results:
 			<br />
 			<div id="slot1" class="ballslot">
@@ -61,7 +79,7 @@
 			<button id="getCash" onclick="getCash()">Scrounge for some cash</button>
 			-->
 		</div>
-		<div id="upgradesBox" >
+		<div id="upgradesBox"  class="standardBox">
 			<table>
 				<tr>
 					<td>Winnings Multiplier</td>
@@ -83,7 +101,11 @@
 					<td><span id="tickSpeedSpan">0</span></td>
 					<td><button id="tickSpeedBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
 				</tr>
-
+				<tr>
+					<td>XP Gain</td>
+					<td><span id="xpGainSpan">0</span></td>
+					<td><button id="xpGainBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
+				</tr>
 			</table>
 		</div>
 		<div id="payoutTableDiv">
@@ -167,6 +189,59 @@
 						</tbody>
 					</table>
 			</div>
+		</div>
+
+		<div id="ballRemoveBox" class="standardBox">
+			Choose a ball to remove ( <span id="ballRemCharges">0</span> remaining):
+			<br />
+			<div id="slot1" class="ballslot">
+				Ball 1
+				<br />
+				<select id="remBall1dropdown" name="rem1dropdown"></select>
+				<br />
+				<button id="0remBall" onclick="removeBall(this)">Remove</button>
+			</div>
+			<div id="slot2" class="ballslot">
+				Ball 2
+				<br />
+				<select id="remBall2dropdown" name="rem2dropdown"></select>
+				<br />
+				<button id="1remBall" onclick="removeBall(this)">Remove</button>
+			</div>
+			<div id="slot3" class="ballslot">
+				Ball 3
+				<br />
+				<select id="remBall3dropdown" name="rem3dropdown"></select>
+				<br />
+				<button id="2remBall" onclick="removeBall(this)">Remove</button>
+			</div>
+			<div id="slot4" class="ballslot">
+				Ball 4
+				<br />
+				<select id="remBall4dropdown" name="rem4dropdown"></select>
+				<br />
+				<button id="3remBall" onclick="removeBall(this)">Remove</button>
+			</div>
+			<div id="slot5" class="ballslot">
+				Ball 5
+				<br />
+				<select id="remBall5dropdown" name="rem5dropdown"></select>
+				<br />
+				<button id="4remBall" onclick="removeBall(this)">Remove</button>
+			</div>
+			<div id="slot6" class="ballslot">
+				Superball!
+				<br />
+				<select id="remBall6dropdown" name="rem6dropdown"></select>
+				<br />
+				<button id="5remBall" onclick="removeBall(this)">Remove</button>
+			</div>
+		</div>
+
+		<div id="menuDiv" class="standardBox">
+			<button onclick="saveGame()">Save</button>
+			<button onclick="loadGame()">Load</button>
+			<button onclick="wipeGame()">Hard Reset</button>
 		</div>
 	</body>
 </html>

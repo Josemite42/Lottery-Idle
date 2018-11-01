@@ -1,3 +1,7 @@
+body {
+    font-family: "Trebuchet MS", Helvetica, sans-serif
+}
+
 .ballslot {
     float: left;
     text-align: center;
@@ -22,33 +26,36 @@
     border: 1px solid black; 
 }
 
+.progressBackground {
+    width: 100%;
+    height: 100%;
+    background-color: darkgrey;
+}
+
+.progressForeground {
+    width: 1%;
+    height: 100%;
+    background-color: dimgrey;
+}
+
 #statusbox {
     width: calc(100%-10px);
+    /*height: 1.2em;*/
     border-style: solid;
     border-width: 1px;
     box-shadow: 4px 4px 3px grey;
-    padding: 4px;
+    padding: 2px;
     margin: 10px;
     float: top;
 }
 
-#ballBox {
+.standardBox {
     border-style: solid;
     border-width: 1px;
     box-shadow: 4px 4px 3px grey;
     padding: 4px; 
     margin: 10px;
     float: left;
-}
-
-#upgradesBox {
-    border-style: solid;
-    border-width: 1px;
-    box-shadow: 4px 4px 3px grey;
-    padding: 4px; 
-    margin: 10px;
-    float: left;
-
 }
 
 #payoutTableDiv{
@@ -71,4 +78,18 @@
     margin: 10px;
     color: red;
     float: left;
+}
+
+#xpProgressHolder{
+    display: inline-block;
+    height: 80%;
+    width: 90%;
+    vertical-align: middle;
+}
+
+#menuDiv{
+    padding: 4px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }

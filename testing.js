@@ -65,3 +65,12 @@ function drawBallTest (n){
     console.log(new Date()-timetest);
     return testmat;
 }
+
+function xpLoop(x){
+    var max = 137;
+    var n = x;
+    if (n>max) n-=max;
+    updateXP(n,max);
+    n++;
+    window.setTimeout(function(){xpLoop(n);}, 15);
+}
