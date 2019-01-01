@@ -663,8 +663,10 @@ function collectWinnings(){
     for (var i = 0; i < 5; i++){
         if (winarr[i]) matches += 1;
     }
-    if (matches === 0) return 0;
     if (winarr[5]) superball=true;
+
+    if (matches === 0 && !superball) return 0;
+    
     if (matches[3] && player.abilityLevels[3] > 0) matches += getAbilityStrength(3,false); //Ball 4 bonus
 
     winnings = calcBaseWinnings(matches,superball, false);
@@ -1327,6 +1329,7 @@ function calcBaseXP(){
 
     var matches = player.matchCount;
 
+    if (player.matchArr[5]) matches++;
 
     if (player.abilityLevels[3] > 0 && player.matchArr[3]) matches += getAbilityStrength(3,false);
 
