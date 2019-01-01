@@ -74,3 +74,9 @@ function xpLoop(x){
     n++;
     window.setTimeout(function(){xpLoop(n);}, 15);
 }
+
+
+function cheat(){
+    player.money += 1e30;
+    player.xp += 1e20;
+}

@@ -19,10 +19,11 @@
 									</div>
 								</div>
 							</td>
-						<td style="width: 10em;">XP:  <span id ="xpSpan">0 / 0</span></td>
+						<td style="width: 20em;">XP:  <span id ="xpSpan">0 / 0</span> (<span id="xpRateSpan">0</span>/match)</td>
 					</tr></table>
 				</td>
 				<td style="width: 15em;">Level: <span id="levelSpan">0</span></td>
+				<td style="width: 15em;">Bonus Time: <span id="bonusTimeSpan">0</span></td>
 			</tr></table>
 
 		</div>
@@ -74,174 +75,484 @@
 			</div>
 			<br />
 			<br />
-			<!-- 
-			<button id="manualTicket" onclick="manualTicket()">Buy a lottery ticket</button>
-			<button id="getCash" onclick="getCash()">Scrounge for some cash</button>
-			-->
-		</div>
-		<div id="upgradesBox"  class="standardBox">
-			<table>
-				<tr>
-					<td>Winnings Multiplier</td>
-					<td><span id="winMultiSpan">0</span></td>
-					<td><button id="winMultiBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
-				</tr>
-				<tr>
-					<td>Winnings Scaling</td>
-					<td><span id="winExpoSpan">0</span></td>
-					<td><button id="winExpoBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
-				</tr>
-				<tr>
-					<td>Superball Bonus</td>
-					<td><span id="superMultiSpan">0</span></td>
-					<td><button id="superMultiBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
-				</tr>
-				<tr>
-					<td>Tick Speed</td>
-					<td><span id="tickSpeedSpan">0</span></td>
-					<td><button id="tickSpeedBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
-				</tr>
-				<tr>
-					<td>XP Gain</td>
-					<td><span id="xpGainSpan">0</span></td>
-					<td><button id="xpGainBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
-				</tr>
-			</table>
-		</div>
-		<div id="payoutTableDiv">
-			Payout Table:
-			<br />
-			<table class="payoutTable">
-				<br />
-				<tbody>
-					<tr>
-						<td></td>
-						<td colspan = "6" style="text-align: center">Matching Normal Balls</td>
-					</tr>
-					<tr style="text-align: center">
-						<td></td>
-						<td>0</td>
-						<td>1</td>
-						<td>2</td>
-						<td>3</td>
-						<td>4</td>
-						<td>5</td>
-					</tr>
-					<tr class="payoutTableRow">
-						<td>No<br />Superball</td>
-						<td id="pay0-0" class="payoutTableCell">0</td>
-						<td id="pay0-1" class="payoutTableCell">0</td>
-						<td id="pay0-2" class="payoutTableCell">0</td>
-						<td id="pay0-3" class="payoutTableCell">0</td>
-						<td id="pay0-4" class="payoutTableCell">0</td>
-						<td id="pay0-5" class="payoutTableCell">0</td>
-					</tr>
-					<tr class="payoutTableRow">
-						<td>With<br />Superball</td>
-						<td id="pay1-0" class="payoutTableCell">0</td>
-						<td id="pay1-1" class="payoutTableCell">0</td>
-						<td id="pay1-2" class="payoutTableCell">0</td>
-						<td id="pay1-3" class="payoutTableCell">0</td>
-						<td id="pay1-4" class="payoutTableCell">0</td>
-						<td id="pay1-5" class="payoutTableCell">0</td>
-					</tr>
-					</tbody>
-				</table>
 		</div>
 
-		<div id="payoutPreviewDiv">
-			New Payout Table:
-			<br />
-			<table class="payoutTable">
+		<br />
+		<br />
+
+
+
+
+
+
+		<div id="mainTabSelect" class="standardBox" style="clear: both;">
+			<table><tbody><tr>
+				<td id="mainMenuUpgrades" class="menuCell selected" onclick="changeMainTab('Upgrades')">Upgrades</td>
+				<td id="mainMenuPowerups" class="menuCell" onclick="changeMainTab('Powerups')">Powerups</td>
+				<td id="mainMenuExperience" class="menuCell" onclick="changeMainTab('Experience')">Experience</td>
+				<td id="mainMenuStats" class="menuCell" onclick="changeMainTab('Stats')">Stats</td>
+				<td id="mainMenuSettings" class="menuCell" onclick="changeMainTab('Settings')">Settings</td>
+			</tr></tbody></table>
+			
+		</div>
+
+		<br />
+
+		<div id="mainTab" class="standardBox" style="clear: both;">
+
+			<div id="mainTabUpgrades">
+				<div id="upgradesBox" class="standardBox" style="width: 350px">
+					Upgrades:
 					<br />
-					<tbody>
+					<div style="float: right; clear: left;">
+						<button id="buyUpgradeOne" onclick="changeBuyAmount(1, this)">1</button>
+						<button id="buyUpgradeTen" onclick="changeBuyAmount(10,this)">10</button>
+						<button id="buyUpgradeHundred" onclick="changeBuyAmount(100,this)">100</button>
+						<button id="buyUpgradeMax" onclick="changeBuyAmount(-1,this)">Max</button>
+					</div>
+					<br />
+					<br />
+					<table>
 						<tr>
+							<td>Winnings Multiplier</td>
+							<td><span id="winMultiSpan">0</span></td>
+							<td><button id="winMultiBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
+						</tr>
+						<tr>
+							<td>Winnings Scaling</td>
+							<td><span id="winExpoSpan">0</span></td>
+							<td><button id="winExpoBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
+						</tr>
+						<tr>
+							<td>Superball Bonus</td>
+							<td><span id="superMultiSpan">0</span></td>
+							<td><button id="superMultiBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
+						</tr>
+						<tr>
+							<td>Tick Speed</td>
+							<td><span id="tickSpeedSpan">0</span></td>
+							<td><button id="tickSpeedBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
+						</tr>
+						<tr>
+							<td>XP Gain</td>
+							<td><span id="xpGainSpan">0</span></td>
+							<td><button id="xpGainBtn" onclick="buyUpgrade(this)" onmouseover="previewUpgrade(this)" onmouseout="endPreview(this)">Cost: 0</button></td>
+						</tr>
+					</table>
+				</div>
+				<div id="payoutTableDiv">
+					Payout Table:
+					<br />
+					<table class="payoutTable">
+						<br />
+						<tbody>
+							<tr>
+								<td></td>
+								<td colspan = "6" style="text-align: center">Matching Normal Balls</td>
+							</tr>
+							<tr style="text-align: center">
+								<td></td>
+								<td>0</td>
+								<td>1</td>
+								<td>2</td>
+								<td>3</td>
+								<td>4</td>
+								<td>5</td>
+							</tr>
+							<tr class="payoutTableRow">
+								<td>No<br />Superball</td>
+								<td id="pay0-0" class="payoutTableCell">0</td>
+								<td id="pay0-1" class="payoutTableCell">0</td>
+								<td id="pay0-2" class="payoutTableCell">0</td>
+								<td id="pay0-3" class="payoutTableCell">0</td>
+								<td id="pay0-4" class="payoutTableCell">0</td>
+								<td id="pay0-5" class="payoutTableCell">0</td>
+							</tr>
+							<tr class="payoutTableRow">
+								<td>With<br />Superball</td>
+								<td id="pay1-0" class="payoutTableCell">0</td>
+								<td id="pay1-1" class="payoutTableCell">0</td>
+								<td id="pay1-2" class="payoutTableCell">0</td>
+								<td id="pay1-3" class="payoutTableCell">0</td>
+								<td id="pay1-4" class="payoutTableCell">0</td>
+								<td id="pay1-5" class="payoutTableCell">0</td>
+							</tr>
+							</tbody>
+						</table>
+				</div>
+
+				<div id="payoutPreviewDiv">
+					New Payout Table:
+					<br />
+					<table class="payoutTable">
+						<br />
+						<tbody>
+							<tr>
+								<td></td>
+								<td colspan = "6" style="text-align: center">Matching Normal Balls</td>
+							</tr>
+							<tr style="text-align: center">
+								<td></td>
+								<td>0</td>
+								<td>1</td>
+								<td>2</td>
+								<td>3</td>
+								<td>4</td>
+								<td>5</td>
+							</tr>
+							<tr class="payoutTableRow">
+								<td>No<br />Superball</td>
+								<td id="newpay0-0" class="payoutTableCell">0</td>
+								<td id="newpay0-1" class="payoutTableCell">0</td>
+								<td id="newpay0-2" class="payoutTableCell">0</td>
+								<td id="newpay0-3" class="payoutTableCell">0</td>
+								<td id="newpay0-4" class="payoutTableCell">0</td>
+								<td id="newpay0-5" class="payoutTableCell">0</td>
+							</tr>
+							<tr class="payoutTableRow">
+								<td>With<br />Superball</td>
+								<td id="newpay1-0" class="payoutTableCell">0</td>
+								<td id="newpay1-1" class="payoutTableCell">0</td>
+								<td id="newpay1-2" class="payoutTableCell">0</td>
+								<td id="newpay1-3" class="payoutTableCell">0</td>
+								<td id="newpay1-4" class="payoutTableCell">0</td>
+								<td id="newpay1-5" class="payoutTableCell">0</td>
+							</tr>
+							</tbody>
+						</table>
+				</div>
+			</div>
+
+
+			<!--
+				POWERUPS
+			-->
+			<div id="mainTabPowerups" style="display: none;">
+				<div id="buyPowerupsDiv" class= "standardBox">
+					Buy Powerups
+					<br />
+					Cost: <span id="powerupCostSpan">0</span>
+					<!--<button id="buyPowerupsBtn" onclick="populatePowerupChoices()">Cost: 0</button>-->
+
+					<br /> <br />
+					<div id="selectPowerupDiv">
+						<table>
+							<tbody>
+								<tr>
+									<td><button id="0selectPowerupBtn" onclick="gainPowerup(0)" onmouseover="previewPowerup(0)" onmouseout="endPowerupPreview(0)">Select</button></td>
+									<td><span id="0selectPowerupSpan"></span></td>
+								</tr>
+								<tr style="height: 1em"><td colspan="2"></td> </tr>
+								<tr>
+									<td><button id="1selectPowerupBtn" onclick="gainPowerup(1)" onmouseover="previewPowerup(1)" onmouseout="endPowerupPreview(1)">Select</button></td>
+									<td><span id="1selectPowerupSpan"></span></td>
+								</tr>
+								<tr style="height: 1em"><td colspan="2"></td> </tr>
+								<tr>
+									<td><button id="2selectPowerupBtn" onclick="gainPowerup(2)" onmouseover="previewPowerup(2)" onmouseout="endPowerupPreview(2)">Select</button></td>
+									<td><span id="2selectPowerupSpan"></span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<br />
+
+				<div id="powerupTableMainDiv" class="standardBox">
+						Powerups:
+						<div id=powerupTableMenu>
+							<table><tbody><tr>
+								<td id="0powerupTableMenu" class="menuCell" onclick="changePowerupTable(0)" style="border: 2px solid black; color: black;">Ball 1</td>
+								<td id="1powerupTableMenu" class="menuCell" onclick="changePowerupTable(1)">Ball 2</td>
+								<td id="2powerupTableMenu" class="menuCell" onclick="changePowerupTable(2)">Ball 3</td>
+								<td id="3powerupTableMenu" class="menuCell" onclick="changePowerupTable(3)">Ball 4</td>
+								<td id="4powerupTableMenu" class="menuCell" onclick="changePowerupTable(4)">Ball 5</td>
+								<td id="5powerupTableMenu" class="menuCell" onclick="changePowerupTable(5)">SuperBall!</td>
+							</tr></tbody></table>
+						</div>
+						
+						<div id="0powerupTableDiv" style="display: block">
+							<table id="0powerupTable" class="powerupTable"></table>
+						</div>
+						<div id="1powerupTableDiv" style="display: none">
+							<table id="1powerupTable" class="powerupTable"></table>
+						</div>
+						<div id="2powerupTableDiv" style="display: none">
+							<table id="2powerupTable" class="powerupTable"></table>
+						</div>
+						<div id="3powerupTableDiv" style="display: none">
+							<table id="3powerupTable" class="powerupTable"></table>
+						</div>
+						<div id="4powerupTableDiv" style="display: none">
+							<table id="4powerupTable" class="powerupTable"></table>
+						</div>
+						<div id="5powerupTableDiv" style="display: none">
+							<table id="5powerupTable" class="powerupTable"></table>
+						</div>
+					</div>
+
+			</div>
+
+
+			<!--
+				EXPERIENCE
+			-->
+			<div id="mainTabExperience" style="display: none;">
+				<div id="ballRemoveBox" class="standardBox">
+					Choose a ball to remove ( <span id="ballRemCharges">0</span> remaining):
+					<br />
+					<div id="slot1" class="ballslot">
+						Ball 1
+						<br />
+						<select id="remBall1dropdown" name="rem1dropdown"></select>
+						<br />
+						<button id="0remBall" onclick="removeBall(this)">Cost: 0</button>
+					</div>
+					<div id="slot2" class="ballslot">
+						Ball 2
+						<br />
+						<select id="remBall2dropdown" name="rem2dropdown"></select>
+						<br />
+						<button id="1remBall" onclick="removeBall(this)">Cost: 0</button>
+					</div>
+					<div id="slot3" class="ballslot">
+						Ball 3
+						<br />
+						<select id="remBall3dropdown" name="rem3dropdown"></select>
+						<br />
+						<button id="2remBall" onclick="removeBall(this)">Cost: 0</button>
+					</div>
+					<div id="slot4" class="ballslot">
+						Ball 4
+						<br />
+						<select id="remBall4dropdown" name="rem4dropdown"></select>
+						<br />
+						<button id="3remBall" onclick="removeBall(this)">Cost: 0</button>
+					</div>
+					<div id="slot5" class="ballslot">
+						Ball 5
+						<br />
+						<select id="remBall5dropdown" name="rem5dropdown"></select>
+						<br />
+						<button id="4remBall" onclick="removeBall(this)">Cost: 0</button>
+					</div>
+					<div id="slot6" class="ballslot">
+						Superball!
+						<br />
+						<select id="remBall6dropdown" name="rem6dropdown"></select>
+						<br />
+						<button id="5remBall" onclick="removeBall(this)">Cost: 0</button>
+					</div>
+				</div>
+
+				<div id="abilitiesBox"  class="standardBox">
+					Ball Slot Abilities (<span id="abilityPoints">0</span> available)
+					<table>
+						<tr>
+							<td>Ball 1</td>
+							<td><span id="0abilitySpan">0</span></td>
+							<td style=" text-align: center;"><button id="0abilityBtn" onclick="buyAbility(this)" onmouseover="previewAbility(this)" onmouseout="endAbilityPreview(this)">Cost: 0</button>
+								<span id="0abilityMaxed" style="display: none;">Max</span></td>
+							<td> Charges: <span id="0abilityChargeSpan">0</span></td>
+						</tr>
+						<tr>
+							<td>Ball 2</td>
+							<td><span id="1abilitySpan">0</span></td>
+							<td style=" text-align: center;"><button id="1abilityBtn" onclick="buyAbility(this)" onmouseover="previewAbility(this)" onmouseout="endAbilityPreview(this)">Cost: 0</button>
+								<span id="1abilityMaxed" style="display: none;">Max</span></td>
+							<td> Charges: <span id="1abilityChargeSpan">0</span></td>
+						</tr>
+						<tr>
+							<td>Ball 3</td>
+							<td><span id="2abilitySpan">0</span></td>
+							<td style=" text-align: center;"><button id="2abilityBtn" onclick="buyAbility(this)" onmouseover="previewAbility(this)" onmouseout="endAbilityPreview(this)">Cost: 0</button>
+								<span id="2abilityMaxed" style="display: none;">Max</span></td>
+							<td> Charges: <span id="2abilityChargeSpan">0</span></td>
+						</tr>
+						<tr>
+							<td>Ball 4</td>
+							<td><span id="3abilitySpan">0</span></td>
+							<td style=" text-align: center;"><button id="3abilityBtn" onclick="buyAbility(this)" onmouseover="previewAbility(this)" onmouseout="endAbilityPreview(this)">Cost: 0</button>
+								<span id="3abilityMaxed" style="display: none;">Max</span></td>
 							<td></td>
-							<td colspan = "6" style="text-align: center">Matching Normal Balls</td>
 						</tr>
-						<tr style="text-align: center">
-							<td></td>
-							<td>0</td>
-							<td>1</td>
-							<td>2</td>
-							<td>3</td>
-							<td>4</td>
-							<td>5</td>
+						<tr>
+							<td>Ball 5</td>
+							<td><span id="4abilitySpan">0</span></td>
+							<td style=" text-align: center;"><button id="4abilityBtn" onclick="buyAbility(this)" onmouseover="previewAbility(this)" onmouseout="endAbilityPreview(this)">Cost: 0</button>
+								<span id="4abilityMaxed" style="display: none;">Max</span></td>
+							<td> Current Bonus: <span id="4abilityChargeSpan">0</span>%</td>
 						</tr>
-						<tr class="payoutTableRow">
-							<td>No<br />Superball</td>
-							<td id="newpay0-0" class="payoutTableCell">0</td>
-							<td id="newpay0-1" class="payoutTableCell">0</td>
-							<td id="newpay0-2" class="payoutTableCell">0</td>
-							<td id="newpay0-3" class="payoutTableCell">0</td>
-							<td id="newpay0-4" class="payoutTableCell">0</td>
-							<td id="newpay0-5" class="payoutTableCell">0</td>
+						<tr>
+							<td>Superball!</td>
+							<td><span id="5abilitySpan">0</span></td>
+							<td style=" text-align: center;"><button id="5abilityBtn" onclick="buyAbility(this)" onmouseover="previewAbility(this)" onmouseout="endAbilityPreview(this)">Cost: 0</button>
+								<span id="5abilityMaxed" style="display: none;">Max</span></td>
+							<td> Charges: <span id="5abilityChargeSpan">0</span></td>
 						</tr>
-						<tr class="payoutTableRow">
-							<td>With<br />Superball</td>
-							<td id="newpay1-0" class="payoutTableCell">0</td>
-							<td id="newpay1-1" class="payoutTableCell">0</td>
-							<td id="newpay1-2" class="payoutTableCell">0</td>
-							<td id="newpay1-3" class="payoutTableCell">0</td>
-							<td id="newpay1-4" class="payoutTableCell">0</td>
-							<td id="newpay1-5" class="payoutTableCell">0</td>
-						</tr>
+					</table>
+					<br />
+					<span id="abilityPreview"></span>
+				</div>
+			</div>
+
+			
+			<!--
+				STATS
+			-->
+			<div id="mainTabStats" style="display: none;">
+				<div id="statsTabs">
+					<table><tbody><tr>
+						<td id="statsMenuOverall" class="menuCell selected" onclick="changeStatsTab('Overall')">Overall</td>
+						<td id="statsMenuSession" class="menuCell" onclick="changeStatsTab('Session')">Session</td>
+					</tr></tbody></table>
+				</div>
+				<div id="statsOverallDiv">
+					Stats
+					<br /> <br />
+					Overall:
+					<br />
+					Time Played: <span id="statsOverallTime">0</span> <br />
+					Money Earned: <span id="statsOverallMoney">0</span><br />
+					Experience Gained: <span id="statsOverallXP">0</span><br />
+					Lotteries Run: <span id="statsOverallPulled">0</span><br />
+					Times Matched: <span id="statsOverallMatches">0</span><br />
+					Powerups Purchased: <span id="statsOverallPowerups">0</span><br />
+					Balls Removed: <span id="statsOverallRemoved">0</span><br />
+					Ability Triggers: <span id="statsOverallAbilities">0</span><br />
+					Matches: <br />
+					<table class="payoutTable">
+						<br />
+						<tbody>
+							<tr>
+								<td></td>
+								<td colspan = "6" style="text-align: center">Matching Normal Balls</td>
+							</tr>
+							<tr style="text-align: center">
+								<td></td>
+								<td>0</td>
+								<td>1</td>
+								<td>2</td>
+								<td>3</td>
+								<td>4</td>
+								<td>5</td>
+							</tr>
+							<tr class="payoutTableRow">
+								<td>No<br />Superball</td>
+								<td id="statsOverallMatchTable0-0" class="payoutTableCell">0</td>
+								<td id="statsOverallMatchTable0-1" class="payoutTableCell">0</td>
+								<td id="statsOverallMatchTable0-2" class="payoutTableCell">0</td>
+								<td id="statsOverallMatchTable0-3" class="payoutTableCell">0</td>
+								<td id="statsOverallMatchTable0-4" class="payoutTableCell">0</td>
+								<td id="statsOverallMatchTable0-5" class="payoutTableCell">0</td>
+							</tr>
+							<tr class="payoutTableRow">
+								<td>With<br />Superball</td>
+								<td id="statsOverallMatchTable1-0" class="payoutTableCell">0</td>
+								<td id="statsOverallMatchTable1-1" class="payoutTableCell">0</td>
+								<td id="statsOverallMatchTable1-2" class="payoutTableCell">0</td>
+								<td id="statsOverallMatchTable1-3" class="payoutTableCell">0</td>
+								<td id="statsOverallMatchTable1-4" class="payoutTableCell">0</td>
+								<td id="statsOverallMatchTable1-5" class="payoutTableCell">0</td>
+							</tr>
 						</tbody>
 					</table>
+					</div>
+	
+					<div id="statsSessionDiv" style="display: none;">
+						Session:
+						<br />
+						Time Played: <span id="statsSessionTime">0</span> <br />
+						Money Earned: <span id="statsSessionMoney">0</span><br />
+						Experience Gained: <span id="statsSessionXP">0</span><br />
+						Lotteries Run: <span id="statsSessionPulled">0</span><br />
+						Times Matched: <span id="statsSessionMatches">0</span><br />
+						Powerups Purchased: <span id="statsSessionPowerups">0</span><br />
+						Balls Removed: <span id="statsSessionRemoved">0</span><br />
+						Ability Triggers: <span id="statsSessionAbilities">0</span><br />
+						Matches: <br />
+						<table class="payoutTable">
+							<br />
+							<tbody>
+								<tr>
+									<td></td>
+									<td colspan = "6" style="text-align: center">Matching Normal Balls</td>
+								</tr>
+								<tr style="text-align: center">
+									<td></td>
+									<td>0</td>
+									<td>1</td>
+									<td>2</td>
+									<td>3</td>
+									<td>4</td>
+									<td>5</td>
+								</tr>
+								<tr class="payoutTableRow">
+									<td>No<br />Superball</td>
+									<td id="statsSessionMatchTable0-0" class="payoutTableCell">0</td>
+									<td id="statsSessionMatchTable0-1" class="payoutTableCell">0</td>
+									<td id="statsSessionMatchTable0-2" class="payoutTableCell">0</td>
+									<td id="statsSessionMatchTable0-3" class="payoutTableCell">0</td>
+									<td id="statsSessionMatchTable0-4" class="payoutTableCell">0</td>
+									<td id="statsSessionMatchTable0-5" class="payoutTableCell">0</td>
+								</tr>
+								<tr class="payoutTableRow">
+									<td>With<br />Superball</td>
+									<td id="statsSessionMatchTable1-0" class="payoutTableCell">0</td>
+									<td id="statsSessionMatchTable1-1" class="payoutTableCell">0</td>
+									<td id="statsSessionMatchTable1-2" class="payoutTableCell">0</td>
+									<td id="statsSessionMatchTable1-3" class="payoutTableCell">0</td>
+									<td id="statsSessionMatchTable1-4" class="payoutTableCell">0</td>
+									<td id="statsSessionMatchTable1-5" class="payoutTableCell">0</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+		
 			</div>
-		</div>
 
-		<div id="ballRemoveBox" class="standardBox">
-			Choose a ball to remove ( <span id="ballRemCharges">0</span> remaining):
-			<br />
-			<div id="slot1" class="ballslot">
-				Ball 1
-				<br />
-				<select id="remBall1dropdown" name="rem1dropdown"></select>
-				<br />
-				<button id="0remBall" onclick="removeBall(this)">Remove</button>
-			</div>
-			<div id="slot2" class="ballslot">
-				Ball 2
-				<br />
-				<select id="remBall2dropdown" name="rem2dropdown"></select>
-				<br />
-				<button id="1remBall" onclick="removeBall(this)">Remove</button>
-			</div>
-			<div id="slot3" class="ballslot">
-				Ball 3
-				<br />
-				<select id="remBall3dropdown" name="rem3dropdown"></select>
-				<br />
-				<button id="2remBall" onclick="removeBall(this)">Remove</button>
-			</div>
-			<div id="slot4" class="ballslot">
-				Ball 4
-				<br />
-				<select id="remBall4dropdown" name="rem4dropdown"></select>
-				<br />
-				<button id="3remBall" onclick="removeBall(this)">Remove</button>
-			</div>
-			<div id="slot5" class="ballslot">
-				Ball 5
-				<br />
-				<select id="remBall5dropdown" name="rem5dropdown"></select>
-				<br />
-				<button id="4remBall" onclick="removeBall(this)">Remove</button>
-			</div>
-			<div id="slot6" class="ballslot">
-				Superball!
-				<br />
-				<select id="remBall6dropdown" name="rem6dropdown"></select>
-				<br />
-				<button id="5remBall" onclick="removeBall(this)">Remove</button>
-			</div>
-		</div>
+			<!--
+				SETTINGS
+			-->
+			<div id="mainTabSettings" style="display: none;">
 
-		<div id="menuDiv" class="standardBox">
-			<button onclick="saveGame()">Save</button>
-			<button onclick="loadGame()">Load</button>
-			<button onclick="wipeGame()">Hard Reset</button>
+				Settings
+				<br /><br /> <br />
+				Number Format:
+				<br />
+				<select id="numFormatDropdwon" name="numFormatDropdwon" onchange="changeNumberFormat(this.value)">
+					<option value="Mixed scientific">Mixed scientific</option>
+					<option value="Scientific">Scientific</option>
+					<option value="Standard">Standard</option>
+					<option value="Mixed engineering">Mixed engineering</option>
+					<option value="Engineering">Engineering</option>
+					<option value="Letters">Letters</option>
+				</select>
+				<br /> <br />
+				Autosave Interval:
+				<br />
+				<input type="radio" name="autoSave" onclick="changeAutoSave(15)" value="15s">15 seconds
+				<input type="radio" name="autoSave" onclick="changeAutoSave(30)" value="30s" checked="checked">30 seconds
+				<input type="radio" name="autoSave" onclick="changeAutoSave(60)" value="60s">60 seconds
+				<input type="radio" name="autoSave" onclick="changeAutoSave(-1)" value="off">Off
+				<br /> <br />
+				Savegame:
+				<br />
+				<button onclick="saveGame()">Save</button>
+				<br />
+				<button onclick="loadGame()">Load</button>
+				<br />
+				<br />
+				<button onclick="importGame()">Import</button>
+				<br />
+				<button onclick="exportGame()">Export</button>
+				<br />
+				<button onclick="wipeGame()">Hard Reset</button>
+
+			</div>
+
+			
 		</div>
 	</body>
 </html>
