@@ -667,7 +667,7 @@ function collectWinnings(){
 
     if (matches === 0 && !superball) return 0;
     
-    if (matches[3] && player.abilityLevels[3] > 0) matches += getAbilityStrength(3,false); //Ball 4 bonus
+    if (winarr[3] && player.abilityLevels[3] > 0) matches += getAbilityStrength(3,false); //Ball 4 bonus
 
     winnings = calcBaseWinnings(matches,superball, false);
 
@@ -731,7 +731,7 @@ function generatePayoutTable(preview){
 // Get the price of upgrades
 function getUpgradeCost(upg, amt){
     var cost = 0;
-    var num = 1;
+    var num = 0;
     if (amt === -1){
         var temp = consts.baseCost[upg]*Math.pow(consts.costMulti[upg],player[upg]);
         while (cost + temp <= player.money){
@@ -739,7 +739,8 @@ function getUpgradeCost(upg, amt){
             num++;
             temp = consts.baseCost[upg]*Math.pow(consts.costMulti[upg],player[upg]+num);
         }
-        if (num === 1){
+        if (num === 0){
+            num=1;
             cost = consts.baseCost[upg]*Math.pow(consts.costMulti[upg],player[upg]);
         }
     }else{
@@ -1868,9 +1869,6 @@ function loadFunc(){
         basePlayer.ballMultiPowerups[i]=Array.apply(null, Array(101)).map(Number.prototype.valueOf,0);
     }
 
-
-    player.stats.session.startTime=time;
-
     player.stats.session= {
         startTime: 0,
         money: 0,
@@ -1883,6 +1881,8 @@ function loadFunc(){
         abilityMatches: [0,0,0,0,0,0]
     }
     
+    player.stats.session.startTime=time;
+
 
     // Generate the ball powerup tables
 
