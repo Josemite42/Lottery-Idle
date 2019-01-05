@@ -220,7 +220,7 @@ consts = {
     },
 
     xpGain: 1,
-    xpNeedExpo: 2,
+    xpNeedExpo: 3,
 
     abilityBaseCosts: [1e9, 1e10], //normal, superball slot
     abilityCostScaling: [1e4, 5e5], //normal, superball slot
@@ -264,6 +264,11 @@ htmLabels = {
     dropdowns: ["ball1dropdown","ball2dropdown","ball3dropdown","ball4dropdown","ball5dropdown","ball6dropdown"],
     ballLabels: ["ball1","ball2","ball3","ball4","ball5","ball6"],
     removeDropdowns: ["remBall1dropdown","remBall2dropdown","remBall3dropdown","remBall4dropdown","remBall5dropdown","remBall6dropdown"]
+}
+
+tempVals = {
+    winnings: 0,
+    xp: 0
 }
 
 var FormatList = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'Oc', 'No', 'Dc', 'UDc', 'DDc', 'TDc', 'QaDc', 'QtDc', 'SxDc', 'SpDc', 'ODc', 'NDc', 'Vg', 'UVg', 'DVg', 'TVg', 'QaVg', 'QtVg', 'SxVg', 'SpVg', 'OVg', 'NVg', 'Tg', 'UTg', 'DTg', 'TTg', 'QaTg', 'QtTg', 'SxTg', 'SpTg', 'OTg', 'NTg', 'Qd', 'UQd', 'DQd', 'TQd', 'QaQd', 'QtQd', 'SxQd', 'SpQd', 'OQd', 'NQd', 'Qi', 'UQi', 'DQi', 'TQi', 'QaQi', 'QtQi', 'SxQi', 'SpQi', 'OQi', 'NQi', 'Se', 'USe', 'DSe', 'TSe', 'QaSe', 'QtSe', 'SxSe', 'SpSe', 'OSe', 'NSe', 'St', 'USt', 'DSt', 'TSt', 'QaSt', 'QtSt', 'SxSt', 'SpSt', 'OSt', 'NSt', 'Og', 'UOg', 'DOg', 'TOg', 'QaOg', 'QtOg', 'SxOg', 'SpOg', 'OOg', 'NOg', 'Nn', 'UNn', 'DNn', 'TNn', 'QaNn', 'QtNn', 'SxNn', 'SpNn', 'ONn', 'NNn', 'Ce',];
@@ -490,12 +495,13 @@ function wipeGame(){
 //
 // Imports a game from a given text string
 function importGame(){
-    var saveString = window.prompt("Enter your save below: \n WARNING: THIS WILL OVERWRITE YOUR CURRENT SAVE!");
+    if (!confirm("Are you sure you want to import?  THIS WILL REPLACE YOUR CURRENT SAVE!")) return;
+    var saveString = document.getElementById("importBox").value;
     if (!saveString) {
         alert("Please enter a save string.");
         return;
     }
-
+    //debugger;
     var saveGame = JSON.parse(atob(saveString));
 
     // Check for save validity here
@@ -511,7 +517,7 @@ function importGame(){
 // Exports the game to a string, for transferring between computers etc.
 function exportGame(){
     var out = btoa(JSON.stringify(player));
-    window.prompt("Your save string:",out);
+    document.getElementById("exportBox").innerHTML=out;
 }
 
 //
@@ -701,6 +707,7 @@ function runLottery (){
 
     player.stats.overall.money += winnings;
     player.stats.session.money += winnings;
+    tempVals.winnings = winnings;
 
     return winarr;
 }
@@ -1245,21 +1252,14 @@ function changePowerupTable(slot){
 //
 // Changes the current stats tab
 function changeStatsTab(tab){
+    var names = ["Overall","Session","Log"]
     
-    if (tab === "Overall"){
-        document.getElementById("statsMenuOverall").classList.add("selected");
-        document.getElementById("statsOverallDiv").style.display="block";
-
-        document.getElementById("statsMenuSession").classList.remove("selected");
-        document.getElementById("statsSessionDiv").style.display="none";
-    }else{
-        document.getElementById("statsMenuSession").classList.add("selected");
-        document.getElementById("statsSessionDiv").style.display="block";
-
-        document.getElementById("statsMenuOverall").classList.remove("selected");
-        document.getElementById("statsOverallDiv").style.display="none";
+    for (var i=0; i < names.length; i++){
+        document.getElementById("statsDiv"+names[i]).style.display="none";
+        document.getElementById("statsMenu"+names[i]).classList.remove("selected");
     }
-
+    document.getElementById("statsDiv"+tab).style.display="block";
+    document.getElementById("statsMenu"+tab).classList.add("selected");
 }
 
 //
@@ -1383,6 +1383,7 @@ function generateXP(){
 
     player.stats.overall.xp += xpGained;
     player.stats.session.xp += xpGained;
+    tempVals.xp = xpGained;
 
     // keep levelling until we run out of XP
     while (player.xp >= getXPNeeded()){
@@ -1410,7 +1411,7 @@ function generateXP(){
 // Shows the ball removal box and populates the elements in it
 function unlockBallRemoval(){
     document.getElementById("ballRemCharges").innerHTML= formatValue(player.remCharges,2,0);
-    document.getElementById("ballRemoveBox").style.display = 'block';
+    //document.getElementById("ballRemoveBox").style.display = 'block';
     updateRemoveLabels();
 }
 
@@ -1691,8 +1692,39 @@ function updateStats(calc){
         player.stats.overall.matchCount[sb][count]++;
         player.stats.session.matchCount[sb][count]++;
 
+
+        // Update the results log
+        var tbl = document.getElementById("logTable");
+        var row = tbl.insertRow(2);
+
+        var cell;
+
+        for (var i=0; i<= 5; i++){
+            var str = "";
+
+            cell = row.insertCell();
+            
+            for (var j=0; j < player.pulled[i].length; j++){
+                str += player.pulled[i][j] +",";
+            } 
+            str = str.slice(0,-1);
+            cell.innerHTML = str;
+            if (player.matchArr[i]) cell.style.color="red";
+        }
+        cell = row.insertCell();
+        if (tempvals.winnings === 0){
+            cell.innerHTML = "-";
+        }else{
+            cell.innerHTML = "$" + formatValue(tempVals.winnings,2,0);
+        }
+        cell = row.insertCell();
+        cell.innerHTML = formatValue(tempVals.xp,2,1);
+
+        if (tbl.rows.length > 32) tbl.deleteRow(-1);
     }
 
+
+    // Label updating
     if (document.getElementById("mainTabStats").display != "none"){
         var ovAbil="";
         var seAbil="";
@@ -1826,6 +1858,24 @@ function coreLoop(){
 //
 // Sets labels, starts core loop, other functions to get the game "running"
 function initializeGame(){
+
+    var d = new Date();
+    var time = d.getTime();
+
+    player.stats.session= {
+        startTime: 0,
+        money: 0,
+        xp: 0,
+        pulls: 0,
+        ballMatches: [0,0,0,0,0,0],
+        matchCount: [[0,0,0,0,0],[0,0,0,0,0]],
+        powerups: 0,
+        ballsRemoved: 0,
+        abilityMatches: [0,0,0,0,0,0]
+    }
+    
+    player.stats.session.startTime=time;
+
     updateDropdowns();
     updateAbilityLabels();
     updateRemoveLabels();
@@ -1869,19 +1919,6 @@ function loadFunc(){
         basePlayer.ballMultiPowerups[i]=Array.apply(null, Array(101)).map(Number.prototype.valueOf,0);
     }
 
-    player.stats.session= {
-        startTime: 0,
-        money: 0,
-        xp: 0,
-        pulls: 0,
-        ballMatches: [0,0,0,0,0,0],
-        matchCount: [[0,0,0,0,0],[0,0,0,0,0]],
-        powerups: 0,
-        ballsRemoved: 0,
-        abilityMatches: [0,0,0,0,0,0]
-    }
-    
-    player.stats.session.startTime=time;
 
 
     // Generate the ball powerup tables
@@ -1919,6 +1956,9 @@ function loadFunc(){
 
         coreLoop();
     }
+
+
+
 
     //Delay autosave so we don't overwrite immediately
     window.setTimeout(function(){autoSave();}, 60000)

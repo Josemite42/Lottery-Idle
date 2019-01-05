@@ -406,9 +406,10 @@
 					<table><tbody><tr>
 						<td id="statsMenuOverall" class="menuCell selected" onclick="changeStatsTab('Overall')">Overall</td>
 						<td id="statsMenuSession" class="menuCell" onclick="changeStatsTab('Session')">Session</td>
+						<td id="statsMenuLog" class="menuCell" onclick="changeStatsTab('Log')">Results Log</td>
 					</tr></tbody></table>
 				</div>
-				<div id="statsOverallDiv">
+				<div id="statsDivOverall">
 					Stats
 					<br /> <br />
 					Overall:
@@ -460,7 +461,7 @@
 					</table>
 					</div>
 	
-					<div id="statsSessionDiv" style="display: none;">
+					<div id="statsDivSession" style="display: none;">
 						Session:
 						<br />
 						Time Played: <span id="statsSessionTime">0</span> <br />
@@ -509,6 +510,23 @@
 							</tbody>
 						</table>
 					</div>
+					<div id="statsDivLog" style="display: none">
+						Lottery results log:
+						<br /><br /> <br />
+						<table id="logTable">
+							<tr>
+								<td style="width: 5em;">Slot 1</td>
+								<td style="width: 5em;">Slot 2</td>
+								<td style="width: 5em;">Slot 3</td>
+								<td style="width: 5em;">Slot 4</td>
+								<td style="width: 5em;">Slot 5</td>
+								<td style="width: 7em;">SuperBall!</td>
+								<td style="width: 6em;">Winnings</td>
+								<td style="width: 5em;">XP</td>
+							</tr>
+							<tr><td colspan="8">&nbsp;</td></tr>
+						</table>
+					</div>
 		
 			</div>
 
@@ -546,7 +564,11 @@
 				<br />
 				<button onclick="importGame()">Import</button>
 				<br />
+				<textarea id="importBox" class="importExportBox" rows="8" cols="40"></textarea>
+				<br />
 				<button onclick="exportGame()">Export</button>
+				<br />
+				<textarea id="exportBox" class="importExportBox" rows="8" cols="40"></textarea>
 				<br />
 				<button onclick="wipeGame()">Hard Reset</button>
 
